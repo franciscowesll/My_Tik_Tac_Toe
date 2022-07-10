@@ -1,4 +1,6 @@
 
+
+const btn = document.getElementById("btn")
 const game = document.querySelector(".container")
 const sequence_win = [
                 [0,3,6], 
@@ -12,25 +14,48 @@ const sequence_win = [
             ]
 
 //create the 9 position
-const columns_rows = ["","","","","","","","",""]
-    
-function draw(){
-    let content = ""
+var columns_rows = ["","","","","","","","",""]
 
-    for (i in columns_rows){
-        content+= "<div onclick=clickButton("+i+")>"+columns_rows[i]+"</div>"
-        game.innerHTML = content
-    
+var gameOver = false
+
+
+
+btn.addEventListener("click", () => {
+   
+    draw(1)
+})
+
+
+function draw(valor){
+
+    let content = ""
+    if (valor == 1){
+        columns_rows = ["","","","","","","","",""]
+        gameOver = false
+        flag = 0
+     
     }
 
-  
+
+    for (i in columns_rows){
+            content+="<div onclick='clickButton("+i+")'>"+columns_rows[i]+"</div>"
+            game.innerHTML = content
+        }
+   
 } 
 draw() 
 
-//Cheking if the
 
+var playerX = document.getElementById('playerX')
+var playerO = document.getElementById('playerO')
+var winPlayerX = 0
+var winPlayerO = 0
+playerX.innerHTML = winPlayerX
+playerO.innerHTML = winPlayerO 
+
+//Cheking who won
 function check_win(){
-    var gameOver = false
+    
     for (i in sequence_win){
     if(
         columns_rows[sequence_win[i][0]] == 'X' &&
@@ -38,7 +63,8 @@ function check_win(){
         columns_rows[sequence_win[i][2]] == 'X'){
         gameOver = true
         alert('Game Over o vencedor é o player X')
-        
+        winPlayerX += 1
+        playerX.innerHTML = winPlayerX
     } 
       else if(
           columns_rows[sequence_win[i][0]] == 'O' &&
@@ -46,21 +72,28 @@ function check_win(){
           columns_rows[sequence_win[i][2]] == 'O'){
           gameOver = true
           alert('Game Over o vencedor é o player O')
-       
+          winPlayerO += 1
+          playerO.innerHTML = winPlayerO
       }
       setTimeout(function(){
-       if(gameOver === false && flag === 8){
+       if(gameOver === false && flag === 9){
             alert('Deu Velha')
             gameOver = true
       }},100)
           
     }
 
+    if (gameOver === true){
+        btn.disabled = false
+    }else {
+        btn.disabled = true
+    }
+console.log(gameOver)
 }
    
 
 
-//Aqui vamos definir quando será colocado X ou O
+//Let's go to define when will be put X or O
 var x_0 = true
 var flag = 0
 
@@ -83,12 +116,20 @@ function clickButton(position){
       alert("Tic Tac Toe, Player has already entered!")
     }
     // redesenha e verifica a situação do jogo ao click
-     draw() 
-     setTimeout(function(){
-        check_win()
+    if (gameOver === false){
+        draw() 
+        setTimeout(function(){
+            check_win()
+        },50)
+    } else {
+        alert("Jogo concluído!! Clique no botão abaixo para recomeçar")
+    }
+  
+    
       
-    },50)
+    
 }
+
 
 
 
